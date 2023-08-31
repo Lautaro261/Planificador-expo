@@ -7,6 +7,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 const BudgetControl = ({budget, costs}) => {
   const [availableAmount, setAvailableAmount] = useState(1); //dinero disponile
   const [expenses, setExponses] = useState(2); //dinero gastado
+  const [percentage, setPercentage] =useState(0)
 
   useEffect(() => {
     // ------------------------------CALCULO DE GASTADO-------------------------------------------------
@@ -14,18 +15,35 @@ const BudgetControl = ({budget, costs}) => {
       (total, obj) => total + Number(obj.quantity),
       0,
     );
-    console.log('calculo de gastos: ', totalExpended);
+    //console.log('calculo de gastos: ', totalExpended);
     setExponses(totalExpended);
     //------------------------------CALCULO DISPONIBLE------------------------------------------------------
     const totalAvailableAmount = budget - totalExpended;
-    console.log('calculo de disponible:', totalAvailableAmount);
+    //console.log('calculo de disponible:', totalAvailableAmount);
     setAvailableAmount(totalAvailableAmount);
+
+    //-----------------------------CALCULO PORCENTAJE-----------------------------------------------------------
+    const newPercentage = (((budget - totalAvailableAmount) / budget) * 100)
+    setTimeout(()=>{
+      setPercentage(newPercentage);
+    }, 1000)
   }, [costs]);
 
   return (
     <View style={styles.container}>
       <View style={styles.center}>
-        <CircularProgress value={40}/>
+        <CircularProgress 
+        radius={150}
+        value={percentage}
+        valueSuffix={'%'}
+        title='Gastado'
+        inActiveStrokeColor='#F5F5F5'
+        inActiveStrokeWidth={18}
+        activeStrokeColor='#3B82F6'
+        titleStyle={{fontWeight:'400', fontSize:20}}
+        titleColor='#64748B'
+        duration={1500}
+        />
       </View>
 
       <View style={styles.textContainer}>

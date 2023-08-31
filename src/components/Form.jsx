@@ -44,6 +44,7 @@ const Form = ({
           <Text style={styles.btnText}>Cancelar</Text>
         </Pressable>
 
+        { !!id && (
         <Pressable
           style={[styles.btn, styles.btnEliminar]}
           onPress={()=>{
@@ -52,6 +53,9 @@ const Form = ({
           >
           <Text style={styles.btnText}>Eliminar</Text>
         </Pressable>
+
+        )}
+
 
         
       </View>

@@ -18,17 +18,20 @@ import BudgetControl from './src/components/BudgetControl';
 import Form from './src/components/Form';
 import {idGenerator} from './src/helpers';
 import ListCots from './src/components/ListCosts';
+import Filter from './src/components/Filter';
 
 const App = () => {
-  const [isAvalidBudget, setIsAvalidBudget] = useState(true); //cambiar a false
-  const [budget, setBudget] = useState(500);
+  const [isAvalidBudget, setIsAvalidBudget] = useState(false); //cambiar a false
+  const [budget, setBudget] = useState(0);
   const [costs, setCosts] = useState([
-    {id: 1, quantity: 10, name: 'Sushi', category: 'food'},
+    /* {id: 1, quantity: 10, name: 'Sushi', category: 'food'},
     {id: 2, quantity: 40, name: 'Netflix', category: 'subscriptions'},
-    {id: 3, quantity: 50, name: 'Paseo', category: 'divers'},
+    {id: 3, quantity: 50, name: 'Paseo', category: 'divers'}, */
   ]); // array de gastos (expenses)
   const [modalAvailable, setModalAvailable] = useState(false); //cambiar a false
   const [costState, setCostState] = useState({})
+  const [filter, setFilter]=useState('')
+  const [filterCosts, setFilterCosts]=useState([])
 
 
   StatusBar.setBackgroundColor('#3B82F6'); // Cambia el color aquí al que desees
@@ -110,12 +113,26 @@ const App = () => {
           )}
         </View>
 
-        {isAvalidBudget && <ListCots 
-        costs={costs} 
-        setModalAvailable={setModalAvailable}
-        modalAvailable={modalAvailable}
-        setCostState={setCostState}
-        />}
+        {isAvalidBudget && (
+
+          <>
+          <Filter
+          filter={filter}
+          setFilter={setFilter}
+          costs={costs}
+          setFilterCosts={setFilterCosts}
+          />
+
+          <ListCots 
+          costs={costs} 
+          setModalAvailable={setModalAvailable}
+          modalAvailable={modalAvailable}
+          setCostState={setCostState}
+          filter={filter}
+          filterCosts={filterCosts}
+          />
+          </>
+        )}
       </ScrollView>
 
       {modalAvailable && (
