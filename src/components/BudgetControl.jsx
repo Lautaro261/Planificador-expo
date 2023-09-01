@@ -5,8 +5,8 @@ import {formatearCantidad} from '../helpers';
 import CircularProgress from 'react-native-circular-progress-indicator';
 
 const BudgetControl = ({budget, costs}) => {
-  const [availableAmount, setAvailableAmount] = useState(1); //dinero disponile
-  const [expenses, setExponses] = useState(2); //dinero gastado
+  const [availableAmount, setAvailableAmount] = useState(0); //dinero disponile
+  const [expenses, setExponses] = useState(0); //dinero gastado
   const [percentage, setPercentage] =useState(0)
 
   useEffect(() => {

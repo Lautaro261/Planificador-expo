@@ -4,13 +4,13 @@ import globalStyles from '../styles';
 import {formatearCantidad, formatearFecha} from '../helpers';
 
 const diccionaryIcons = {
-  saving: require('../img/icono_ahorro.png'),
-  food: require('../img/icono_comida.png'),
-  home: require('../img/icono_casa.png'),
-  subscriptions: require('../img/icono_suscripciones.png'),
-  health: require('../img/icono_salud.png'),
-  recreation: require('../img/icono_ocio.png'),
-  divers: require('../img/icono_gastos.png'),
+  ahorro: require('../img/icono_ahorro.png'),
+  comida: require('../img/icono_comida.png'),
+  casa: require('../img/icono_casa.png'),
+  suscripcion: require('../img/icono_suscripciones.png'),
+  salud: require('../img/icono_salud.png'),
+  ocio: require('../img/icono_ocio.png'),
+  varios: require('../img/icono_gastos.png'),
 };
 
 const Card = ({cost, setModalAvailable, modalAvailable, setCostState}) => {

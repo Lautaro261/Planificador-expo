@@ -96,13 +96,13 @@ const Form = ({
               setCategory(value);
             }}>
             <Picker.Item label="-- Seleccione --" value="" />
-            <Picker.Item label="Ahorro" value="saving" />
-            <Picker.Item label="Comida" value="food" />
-            <Picker.Item label="Casa" value="home" />
-            <Picker.Item label="Ocio" value="recreation" />
-            <Picker.Item label="Suscripciones" value="subscriptions" />
-            <Picker.Item label="Salud" value="health" />
-            <Picker.Item label="Varios" value="divers" />
+            <Picker.Item label="Ahorro" value="ahorro" />
+            <Picker.Item label="Comida" value="comida" />
+            <Picker.Item label="Casa" value="casa" />
+            <Picker.Item label="Ocio" value="ocio" />
+            <Picker.Item label="Suscripciones" value="suscripciones" />
+            <Picker.Item label="Salud" value="salud" />
+            <Picker.Item label="Varios" value="varios" />
           </Picker>
         </View>
 
@@ -120,7 +120,7 @@ const Form = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1E40AF',
+    backgroundColor: '#2044b9',
     flex: 1,
   },
   form: {

@@ -10,8 +10,7 @@ const Filter=({setFilter, filter, costs, setFilterCosts})=>{
         if(filter === ''){
             setFilterCosts([])
         }else{
-            const gastosFiltrado = costs.filter((cost)=>{cost.category === filter})
-
+            const gastosFiltrado = costs.filter((cost)=> cost.category === filter)
             setFilterCosts(gastosFiltrado);
         }
     },[filter])
@@ -29,13 +28,13 @@ const Filter=({setFilter, filter, costs, setFilterCosts})=>{
             }}
            >
             <Picker.Item label="-- Seleccione --" value="" />
-            <Picker.Item label="Ahorro" value="saving" />
-            <Picker.Item label="Comida" value="food" />
-            <Picker.Item label="Casa" value="home" />
-            <Picker.Item label="Ocio" value="recreation" />
-            <Picker.Item label="Suscripciones" value="subscriptions" />
-            <Picker.Item label="Salud" value="health" />
-            <Picker.Item label="Varios" value="divers" />
+            <Picker.Item label="Ahorro" value="ahorro" />
+            <Picker.Item label="Comida" value="comida" />
+            <Picker.Item label="Casa" value="casa" />
+            <Picker.Item label="Ocio" value="ocio" />
+            <Picker.Item label="Suscripcion" value="suscripcion" />
+            <Picker.Item label="Salud" value="salud" />
+            <Picker.Item label="Varios" value="varios" />
           </Picker>
         </View>
     )

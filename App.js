@@ -38,49 +38,40 @@ const App = () => {
   StatusBar.setBarStyle('light-content'); // Cambia el estilo de los iconos en la barra de notificaciones (light-content o dark-content)
 
   const handlerNewBudget = budget => {
-    console.log('Entre ! desde app', budget);
+    //console.log('Entre ! desde app', budget);
     if (Number(budget) > 0) {
-      console.log('valido');
+      //console.log('valido');
       setIsAvalidBudget(true);
     } else {
-      console.log('no valido!');
+      //console.log('no valido!');
       Alert.alert('Error', 'El presupuesto debe ser igual o mayor a 1', [
         {text: 'ok'},
       ]);
     }
   };
 
-  const handlerCosts = cost => {
+  const handlerCosts = cost => {    // HANDLER PARA FORMULARIO QUE CONTROLA EDITAR O ALERTA 'FALTAN DATOS'
     if ([cost.name, cost.category, cost.quantity].includes('')) {
-      console.log('falta che');
+      //console.log('falta che');
       Alert.alert('Error', 'Todos los campos son obligatorios', [{text: 'Ok'}]);
       return;
     }
-    
-    
-    console.log(cost);
-
+    //console.log(cost);
     if(cost.id){
-      console.log('Edicion')
+      //console.log('Edicion')
       const updatedCosts = costs.map((c)=> c.id === costState.id ? cost : c)
-
       setCosts(updatedCosts)
     }else{
       cost.id = idGenerator();
       cost.date = Date.now();
       setCosts([...costs, cost]);
-
     }
-
-    //Añadir el nuevo gasto al state
     setModalAvailable(!modalAvailable);
-
-    //console.log(cost)
   };
 
 
   const eliminarCard=(id)=>{
-    console.log('eliminar',id)
+    //console.log('eliminar',id)
     Alert.alert(
       '¿Deseas eliminar este gasto?',
       'En gasto eliminado no se puede recuperar',
@@ -176,7 +167,8 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#3B82F6',
-    //minHeight:400  POr si da problema la presupuesto
+    minHeight:380,  //Por si da problema la presupuesto
+    paddingTop:40,
   },
   /* ContainerImage:{
     width:10,
