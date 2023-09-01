@@ -1,5 +1,5 @@
-import React from 'react';
-import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
+import React from "react";
+import { SafeAreaView, View, Text, StyleSheet } from "react-native";
 
 const Header = () => {
   return (
@@ -11,11 +11,11 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   texts: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
-    color: '#FFF',
-    textTransform: 'uppercase',
-    fontWeight: '400',
+    color: "#FFF",
+    textTransform: "uppercase",
+    fontWeight: "400",
     paddingTop: 20,
   },
 });

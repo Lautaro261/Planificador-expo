@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import globalStyles from '../styles';
-import {formatearCantidad} from '../helpers';
-import CircularProgress from 'react-native-circular-progress-indicator';
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import globalStyles from "../styles";
+import { formatearCantidad } from "../helpers";
+import CircularProgress from "react-native-circular-progress-indicator";
 
-const BudgetControl = ({budget, costs}) => {
+const BudgetControl = ({ budget, costs, resetApp }) => {
   const [availableAmount, setAvailableAmount] = useState(0); //dinero disponile
   const [expenses, setExponses] = useState(0); //dinero gastado
-  const [percentage, setPercentage] =useState(0)
+  const [percentage, setPercentage] = useState(0);
 
   useEffect(() => {
     // ------------------------------CALCULO DE GASTADO-------------------------------------------------
     const totalExpended = costs.reduce(
       (total, obj) => total + Number(obj.quantity),
-      0,
+      0
     );
     //console.log('calculo de gastos: ', totalExpended);
     setExponses(totalExpended);
@@ -23,31 +23,35 @@ const BudgetControl = ({budget, costs}) => {
     setAvailableAmount(totalAvailableAmount);
 
     //-----------------------------CALCULO PORCENTAJE-----------------------------------------------------------
-    const newPercentage = (((budget - totalAvailableAmount) / budget) * 100)
-    setTimeout(()=>{
+    const newPercentage = ((budget - totalAvailableAmount) / budget) * 100;
+    setTimeout(() => {
       setPercentage(newPercentage);
-    }, 1000)
+    }, 1000);
   }, [costs]);
 
   return (
     <View style={styles.container}>
       <View style={styles.center}>
-        <CircularProgress 
-        radius={150}
-        value={percentage}
-        valueSuffix={'%'}
-        title='Gastado'
-        inActiveStrokeColor='#F5F5F5'
-        inActiveStrokeWidth={18}
-        activeStrokeColor='#3B82F6'
-        titleStyle={{fontWeight:'400', fontSize:20}}
-        titleColor='#64748B'
-        duration={1500}
+        <CircularProgress
+          radius={150}
+          value={percentage}
+          valueSuffix={"%"}
+          title="Gastado"
+          inActiveStrokeColor="#F5F5F5"
+          inActiveStrokeWidth={18}
+          activeStrokeColor="#3B82F6"
+          titleStyle={{ fontWeight: "400", fontSize: 20 }}
+          titleColor="#64748B"
+          duration={1500}
         />
       </View>
 
       <View style={styles.textContainer}>
         {/* PRESUPUETO */}
+
+        <Pressable style={styles.btn} onLongPress={resetApp}>
+          <Text style={styles.btnTxt}>Reinicar App</Text>
+        </Pressable>
         <Text style={styles.value}>
           <Text style={styles.label}>Presupuesto: </Text>
           {formatearCantidad(budget)}
@@ -72,23 +76,34 @@ const styles = StyleSheet.create({
     ...globalStyles.container,
   },
   center: {
-    alignItems: 'center',
+    alignItems: "center",
   },
-  image: {
+  /* image: {
     width: 250,
     height: 250,
-  },
+  }, */
   textContainer: {
     marginTop: 50,
   },
   value: {
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 10,
   },
   label: {
-    fontWeight: '600',
-    color: '#3B82F6',
+    fontWeight: "600",
+    color: "#3B82F6",
+  },
+  btn: {
+    backgroundColor: "#DB2777",
+    padding: 5,
+    marginBottom: 20,
+    borderRadius: 5,
+  },
+  btnTxt: {
+    textAlign: "center",
+    color: "#fff",
+    fontWeight: "400",
   },
 });
 

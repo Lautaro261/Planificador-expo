@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Pressable, TextInput} from 'react-native';
-import globalStyles from '../styles';
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Pressable, TextInput } from "react-native";
+import globalStyles from "../styles";
 
-const NewBudget = ({handlerNewBudget, budget, setBudget}) => {
+const NewBudget = ({ handlerNewBudget, budget, setBudget }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Definir Presupuesto</Text>
@@ -19,7 +19,8 @@ const NewBudget = ({handlerNewBudget, budget, setBudget}) => {
         onPress={() => {
           handlerNewBudget(budget);
         }}
-        style={styles.button}>
+        style={styles.button}
+      >
         <Text style={styles.buttonText}>Agregar Presupuesto</Text>
       </Pressable>
     </View>
@@ -31,12 +32,12 @@ const styles = StyleSheet.create({
     ...globalStyles.container,
   },
   label: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 18,
-    color: '#3B82F6',
+    color: "#3B82F6",
   },
   input: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     padding: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
@@ -44,13 +45,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    backgroundColor: '#134faf',
+    backgroundColor: "#134faf",
     padding: 10,
     borderRadius: 10,
   },
   buttonText: {
-    color: '#FFF',
-    textAlign: 'center',
+    color: "#FFF",
+    textAlign: "center",
   },
 });
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,15 +10,16 @@ import {
   Image,
   Modal,
   ScrollView,
-} from 'react-native';
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import Header from './src/components/Header';
-import NewBudget from './src/components/NewBudget';
-import BudgetControl from './src/components/BudgetControl';
-import Form from './src/components/Form';
-import {idGenerator} from './src/helpers';
-import ListCots from './src/components/ListCosts';
-import Filter from './src/components/Filter';
+import Header from "./src/components/Header";
+import NewBudget from "./src/components/NewBudget";
+import BudgetControl from "./src/components/BudgetControl";
+import Form from "./src/components/Form";
+import { idGenerator } from "./src/helpers";
+import ListCots from "./src/components/ListCosts";
+import Filter from "./src/components/Filter";
 
 const App = () => {
   const [isAvalidBudget, setIsAvalidBudget] = useState(false); //cambiar a false
@@ -29,39 +30,41 @@ const App = () => {
     {id: 3, quantity: 50, name: 'Paseo', category: 'divers'}, */
   ]); // array de gastos (expenses)
   const [modalAvailable, setModalAvailable] = useState(false); //cambiar a false
-  const [costState, setCostState] = useState({})
-  const [filter, setFilter]=useState('')
-  const [filterCosts, setFilterCosts]=useState([])
+  const [costState, setCostState] = useState({});
+  const [filter, setFilter] = useState("");
+  const [filterCosts, setFilterCosts] = useState([]);
 
+  StatusBar.setBackgroundColor("#3B82F6"); // Cambia el color aquí al que desees
+  StatusBar.setBarStyle("light-content"); // Cambia el estilo de los iconos en la barra de notificaciones (light-content o dark-content)
 
-  StatusBar.setBackgroundColor('#3B82F6'); // Cambia el color aquí al que desees
-  StatusBar.setBarStyle('light-content'); // Cambia el estilo de los iconos en la barra de notificaciones (light-content o dark-content)
-
-  const handlerNewBudget = budget => {
+  const handlerNewBudget = (budget) => {
     //console.log('Entre ! desde app', budget);
     if (Number(budget) > 0) {
       //console.log('valido');
       setIsAvalidBudget(true);
     } else {
       //console.log('no valido!');
-      Alert.alert('Error', 'El presupuesto debe ser igual o mayor a 1', [
-        {text: 'ok'},
+      Alert.alert("Error", "El presupuesto debe ser igual o mayor a 1", [
+        { text: "ok" },
       ]);
     }
   };
 
-  const handlerCosts = cost => {    // HANDLER PARA FORMULARIO QUE CONTROLA EDITAR O ALERTA 'FALTAN DATOS'
-    if ([cost.name, cost.category, cost.quantity].includes('')) {
+  const handlerCosts = (cost) => {
+    // HANDLER PARA FORMULARIO QUE CONTROLA EDITAR O ALERTA 'FALTAN DATOS'
+    if ([cost.name, cost.category, cost.quantity].includes("")) {
       //console.log('falta che');
-      Alert.alert('Error', 'Todos los campos son obligatorios', [{text: 'Ok'}]);
+      Alert.alert("Error", "Todos los campos son obligatorios", [
+        { text: "Ok" },
+      ]);
       return;
     }
     //console.log(cost);
-    if(cost.id){
+    if (cost.id) {
       //console.log('Edicion')
-      const updatedCosts = costs.map((c)=> c.id === costState.id ? cost : c)
-      setCosts(updatedCosts)
-    }else{
+      const updatedCosts = costs.map((c) => (c.id === costState.id ? cost : c));
+      setCosts(updatedCosts);
+    } else {
       cost.id = idGenerator();
       cost.date = Date.now();
       setCosts([...costs, cost]);
@@ -69,24 +72,109 @@ const App = () => {
     setModalAvailable(!modalAvailable);
   };
 
-
-  const eliminarCard=(id)=>{
+  const eliminarCard = (id) => {
     //console.log('eliminar',id)
     Alert.alert(
-      '¿Deseas eliminar este gasto?',
-      'En gasto eliminado no se puede recuperar',
+      "¿Deseas eliminar este gasto?",
+      "En gasto eliminado no se puede recuperar",
       [
-        {text: 'Cancelar', style:'cancel'}, 
-        {text:'Si, Eliminar', onPress:()=>{
-          const gastosActualizados = costs.filter((c)=>{c.id !== id}) // revisar el eliminador de card
-          setCosts(gastosActualizados)
-          setModalAvailable(!modalAvailable)
-          setCostState({})
-        }}
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Si, Eliminar",
+          onPress: () => {
+            const gastosActualizados = costs.filter((c) => {
+              c.id !== id;
+            }); // revisar el eliminador de card
+            setCosts(gastosActualizados);
+            setModalAvailable(!modalAvailable);
+            setCostState({});
+          },
+        },
       ]
-    )
-    
-  }
+    );
+  };
+
+  const resetApp = () => {
+    Alert.alert(
+      "¿Deseas resetear la app?",
+      "Esto eliminará el presupuesto y todos los gastos",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Si.Eliminar",
+          onPress: async () => {
+            try {
+              await AsyncStorage.clear();
+              setIsAvalidBudget(false);
+              setBudget(0);
+              setCosts([]);
+            } catch (error) {
+              console.log("Error!, linea 102");
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  useEffect(() => {
+    const getBudgetToStorage = async () => {
+      try {
+        const getBudget = (await AsyncStorage.getItem("budget")) ?? 0;
+
+        if (getBudget > 0) {
+          setBudget(getBudget);
+          setIsAvalidBudget(!isAvalidBudget);
+        }
+      } catch (error) {
+        console.log("Error linea 97");
+      }
+    };
+
+    getBudgetToStorage();
+  }, []);
+
+  useEffect(() => {
+    if (isAvalidBudget) {
+      const saveBudgetToStorage = async () => {
+        try {
+          await AsyncStorage.setItem("budget", budget);
+        } catch (error) {
+          console.log("Error! linea 111");
+        }
+      };
+      saveBudgetToStorage();
+    }
+  }, [isAvalidBudget]);
+
+  useEffect(() => {
+    const getCostsToStorage = async () => {
+      try {
+        const getCosts = await AsyncStorage.getItem("costs");
+
+        console.log(getCosts);
+
+        setCosts(getCosts ? JSON.parse(getCosts) : []);
+      } catch (error) {
+        console.log("Error! Linea 143");
+      }
+    };
+
+    getCostsToStorage();
+  }, []);
+
+  useEffect(() => {
+    const saveCostsToStorage = async () => {
+      try {
+        console.log(costs);
+        await AsyncStorage.setItem("costs", JSON.stringify(costs));
+      } catch (error) {
+        console.log("Error! linea 131");
+      }
+    };
+
+    saveCostsToStorage();
+  }, [costs]);
 
   return (
     <View style={styles.container}>
@@ -94,7 +182,7 @@ const App = () => {
         <View style={styles.header}>
           <Header />
           {isAvalidBudget ? (
-            <BudgetControl costs={costs} budget={budget} />
+            <BudgetControl costs={costs} budget={budget} resetApp={resetApp} />
           ) : (
             <NewBudget
               budget={budget}
@@ -105,23 +193,22 @@ const App = () => {
         </View>
 
         {isAvalidBudget && (
-
           <>
-          <Filter
-          filter={filter}
-          setFilter={setFilter}
-          costs={costs}
-          setFilterCosts={setFilterCosts}
-          />
+            <Filter
+              filter={filter}
+              setFilter={setFilter}
+              costs={costs}
+              setFilterCosts={setFilterCosts}
+            />
 
-          <ListCots 
-          costs={costs} 
-          setModalAvailable={setModalAvailable}
-          modalAvailable={modalAvailable}
-          setCostState={setCostState}
-          filter={filter}
-          filterCosts={filterCosts}
-          />
+            <ListCots
+              costs={costs}
+              setModalAvailable={setModalAvailable}
+              modalAvailable={modalAvailable}
+              setCostState={setCostState}
+              filter={filter}
+              filterCosts={filterCosts}
+            />
           </>
         )}
       </ScrollView>
@@ -147,11 +234,12 @@ const App = () => {
               //console.log('click', modalAvailable);
               setModalAvailable(!modalAvailable);
               //console.log(modalAvailable);
-            }}>
+            }}
+          >
             {/* <Text>o</Text> */}
             <Image
               style={styles.image}
-              source={require('./src/img/nuevo-gasto.png')}
+              source={require("./src/img/nuevo-gasto.png")}
             />
           </Pressable>
         </View>
@@ -162,13 +250,13 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#757575',
+    backgroundColor: "#757575",
     flex: 1,
   },
   header: {
-    backgroundColor: '#3B82F6',
-    minHeight:380,  //Por si da problema la presupuesto
-    paddingTop:40,
+    backgroundColor: "#3B82F6",
+    minHeight: 380, //Por si da problema la presupuesto
+    paddingTop: 40,
   },
   /* ContainerImage:{
     width:10,
@@ -179,19 +267,19 @@ const styles = StyleSheet.create({
   }, */
   btn: {
     borderWidth: 5,
-    borderColor: 'red',
-    position: 'absolute',
+    borderColor: "red",
+    position: "absolute",
     top: 70,
     right: 30,
     // bottom:40
   },
-  btnPressable:{
+  btnPressable: {
     //backgroundColor:'red',
-    width:70,
-    height:70,
-    position:'absolute',
-    bottom:40,
-    right:30
+    width: 70,
+    height: 70,
+    position: "absolute",
+    bottom: 40,
+    right: 30,
   },
   image: {
     width: 70,
